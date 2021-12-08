@@ -1,0 +1,125 @@
+
+    Resources: Resources are instances of services that you create, like virtual machines, storage, or SQL databases.
+    Resource groups: Resources are combined into resource groups, which act as a logical container into which Azure resources like web apps, databases, and storage accounts are deployed and managed.
+    Subscriptions: A subscription groups together user accounts and the resources that have been created by those user accounts. For each subscription, there are limits or quotas on the amount of resources that you can create and use. Organizations can use subscriptions to manage costs and the resources that are created by users, teams, or projects.
+    Management groups: These groups help you manage access, policy, and compliance for multiple subscriptions. All subscriptions in a management group automatically inherit the conditions applied to the management group.
+
+
+Azure has more global regions than any other cloud provider. These regions give you the flexibility to bring applications closer to your users no matter where they are. Global regions provide better scalability and redundancy. They also preserve data residency for your services.
+
+A resource group is a logical container for resources deployed on Azure. These resources are anything you create in an Azure subscription like VMs, 
+
+role-based access control (RBAC) permissions. By applying RBAC permissions to a resource group, you can ease administration and limit access to allow only what's needed.
+
+With Resource Manager, you can:
+
+    Manage your infrastructure through declarative templates rather than scripts. A Resource Manager template is a JSON file that defines what you want to deploy to Azure.
+    Deploy, manage, and monitor all the resources for your solution as a group, rather than handling these resources individually.
+    Redeploy your solution throughout the development life cycle and have confidence your resources are deployed in a consistent state.
+    Define the dependencies between resources so they're deployed in the correct order.
+    Apply access control to all services because RBAC is natively integrated into the management platform.
+    Apply tags to resources to logically organize all the resources in your subscription.
+    Clarify your organization's billing by viewing costs for a group of resources that share the same tag.
+
+Important facts about management groups
+
+    10,000 management groups can be supported in a single directory.
+    A management group tree can support up to six levels of depth. This limit doesn't include the root level or the subscription level.
+    Each management group and subscription can support only one parent.
+    Each management group can have many children.
+    All subscriptions and management groups are within a single hierarchy in each directory.
+
+
+Azure fundementals part 2
+
+After completing this learning path, you'll be able to:
+
+    Understand the breadth of services available in Azure including compute, network, storage, and database
+    Identify virtualization services such as Azure Virtual Machines, Azure Container Instances, Azure Kubernetes Service, and Azure Virtual Desktop
+    Compare Azure's database services such as Azure Cosmos DB, Azure SQL, Azure Database for MySQL, Azure Database for PostgreSQL, and Azure's big data and analysis services
+    Examine Azure networking resources such as Virtual Networks, VPN Gateways, and Azure ExpressRoute
+    Summarize Azure storage services such Azure Blob Storage, Azure Disk Storage, and Azure File Storage
+
+
+    look for this shit
+    After completing this module, you'll be able to describe the benefits and usage of:
+
+    Azure Virtual Machines
+    Azure App Service
+    Azure Container Instances
+    Azure Kubernetes Service
+    Azure Functions
+    Azure Virtual Desktop
+Azure compute is an on-demand computing service for running cloud-based applications. It provides computing resources such as disks, processors, memory, networking, and operating systems. The resources are available on-demand and can typically be made available in minutes or even seconds. You pay only for the resources you use, and only for as long as you're using them.
+
+Virtual Machines provides infrastructure as a service (IaaS) and can be used in different ways. When you need total control over an operating system and environment, VMs are an ideal choice.
+
+
+Virtual machine scale sets
+
+Virtual machine scale sets are an Azure compute resource that you can use to deploy and manage a set of identical VMs.
+
+Container Instances and Azure Kubernetes Service are Azure compute resources that you can use to deploy and manage containers.
+
+With Azure App Service, you can quickly build, deploy, and scale enterprise-grade web, mobile, and API apps running on any platform. 
+
+Functions are ideal when you're concerned only about the code running your service and not the underlying platform or infrastructure. They're commonly used when you need to perform work in response to an event (often via a REST request), timer, or message from another Azure service, and when that work can be completed quickly, within seconds or less.
+
+Examples of when to use VMs
+
+    During testing and development. VMs provide a quick and easy way to create different OS and application configurations. Test and development personnel can then easily delete the VMs when they no longer need them.
+    When running applications in the cloud. The ability to run certain applications in the public cloud as opposed to creating a traditional infrastructure to run them can provide substantial economic benefits. For example, an application might need to handle fluctuations in demand. Shutting down VMs when you don't need them or quickly starting them up to meet a sudden increase in demand means you pay only for the resources you use.
+    When extending your datacenter to the cloud. An organization can extend the capabilities of its own on-premises network by creating a virtual network in Azure and adding VMs to that virtual network. Applications like SharePoint can then run on an Azure VM instead of running locally. This arrangement makes it easier or less expensive to deploy than in an on-premises environment.
+    During disaster recovery. As with running certain types of applications in the cloud and extending an on-premises network to the cloud, you can get significant cost savings by using an IaaS-based approach to disaster recovery. If a primary datacenter fails, you can create VMs running on Azure to run your critical applications and then shut them down when the primary datacenter becomes operational again.
+
+Virtual machine scale sets let you create and manage a group of identical, load-balanced VMs.
+
+Azure Batch enables large-scale parallel and high-performance computing (HPC) batch jobs with the ability to scale to tens, hundreds, or thousands of VMs.
+
+With App Service, you can host most common app service styles like:
+
+    Web apps
+    API apps
+    WebJobs
+    Mobile apps
+
+
+Azure Kubernetes Service
+
+The task of automating, managing, and interacting with a large number of containers is known as orchestration. Azure Kubernetes Service is a complete orchestration service for containers with distributed architectures and large volumes of containers.
+
+Containers are often used to create solutions by using a microservice architecture. This architecture is where you break solutions into smaller, independent pieces. For example, you might split a website into a container hosting your front end, another hosting your back end, and a third for storage
+
+microservice is a small container that can coexist with many types of services and crossplatform shit
+
+Serverless computing is the abstraction of servers, infrastructure, and operating systems.
+
+Abstraction of servers: Serverless computing abstracts the servers you run on. You never explicitly reserve server instances. The platform manages that for you
+Event-driven scale: Serverless computing is an excellent fit for workloads that respond to incoming events. Events include triggers by:
+
+    Timers, for example, if a function needs to run every day at 10:00 AM UTC.
+    HTTP, for example, API and webhook scenarios.
+    Queues, for example, with order processing.
+    And much more.
+
+
+    Azure Functions: Functions can execute code in almost any modern language.
+    Azure Logic Apps: Logic apps are designed in a web-based designer and can execute logic triggered by Azure services without writing any code.
+
+Logic apps are similar to functions. Both enable you to trigger logic based on an event. Where functions execute code, logic apps execute workflows that are designed to automate business scenarios and are built from predefined logic blocks.
+
+Functions and Logic Apps can both create complex orchestrations. An orchestration is a collection of functions or steps that are executed to accomplish a complex task.
+
+    With Functions, you write code to complete each step.
+    With Logic Apps, you use a GUI to define the actions and how they relate to one another.
+
+You can mix and match services when you build an orchestration, calling functions from logic apps and calling logic apps from functions. Here are some common differences between the two.
+
+Azure Virtual Desktop is a desktop and application virtualization service that runs on the cloud. It enables your users to use a cloud-hosted version of Windows from any location. Azure Virtual Desktop works across devices like Windows, Mac, iOS, Android, and Linux.
+
+why
+Users have the freedom to connect to Azure Virtual Desktop with any device over the internet.
+User sessions are isolated in both single and multi-session environments.
+
+This standardization lets admins identify issues through a single interface
+

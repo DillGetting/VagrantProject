@@ -1,0 +1,34 @@
+notes that are worthy about vagrantfile needs
+
+webservers root document can be different
+
+Define the HTML path and make certain that permissions do not allow users to move outside of those folders. 
+Also, make sure the html path is not in root! Most web servers have quite a bit of flexibility in defining directories and access permissions. 
+It is important to make use of these. Note: This is defined by the document root! Standard document root tends to be 
+/var/www/html however this can change depending on the webserver
+ (and version) used.
+Similar to the first note above, keep in mind that you may need to segregate multiple sites on a single web server.
+ This will often mean creating separate configs for each and, most certainly, storing files on each.
+
+
+
+ Webserver, 
+ 	Idexpage, 404 errors
+    USER is webdev Password 4TheWeb!
+port 25
+
+Database server
+	mysqli-connect.php file for the database 
+	user: dbdev 
+	-p: 4TheDB
+
+Client system for I am guessing the below stuff.
+    user:Client Password:4TheClient
+server monitoring everything.
+	log tools
+	manage other servers, can talk and listen to the other two
+	need LOGS and STATISTICS from both servers.
+I think this is the same machine from the server monitoring 
+maybe not
+
+File server with one shared network file. Like LVM was the hint.
