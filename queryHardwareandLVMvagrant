@@ -1,0 +1,30 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+$provisionScript = <<-SCRIPT
+sed -i 's#PasswordAuthentication no#PasswordAuthentication yes#g' /etc/ssh/sshd_config
+systemctl restart sshd
+SCRIPT
+
+Vagrant.configure("2") do |config|
+    config.vbguest.auto_update = false
+    config.vm.provision "shell", inline: $provisionScript
+    config.vm.define "centos1" do |centos1|
+    centos1.vm.box = "centos/7"
+	centos1.vm.hostname = "centos1"
+    centos1.vm.provider "virtualbox" do |vbcustom|
+
+      unless File.exist?('centos1.additional.vdi')
+        vbcustom.customize ['createhd', '--filename', 'centos1.additional.vdi', '--size', 2 * 1024]
+      end
+      vbcustom.customize ['storageattach', :id, '--storagectl', 'IDE', '--port', 0, '--device', 1, '--type', 'hdd', '--medium', 'centos1.additional.vdi']
+
+      unless File.exist?('centos1.additional2.vdi')
+        vbcustom.customize ['createhd', '--filename', 'centos1.additional2.vdi', '--size', 2 * 1024]
+      end
+      vbcustom.customize ['storageattach', :id, '--storagectl', 'IDE', '--port', 1, '--device', 1, '--type', 'hdd', '--medium', 'centos1.additional2.vdi']
+
+    end
+  end
+
+end
