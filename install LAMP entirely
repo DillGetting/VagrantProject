@@ -1,0 +1,76 @@
+Today, we will be creating a Web Server, specifically one called a LAMP stack.
+
+    L (Linux) - I will be using Ubuntu Server
+    A (Apache) - The actual web server that responds to queries and serves the requested content
+    M (mySQL) - The database management system
+    P (Php) - Open source scripting language that allows pages to be generated dynamically
+
+I will be using Ubuntu Server 20.04 (1.3GB) - Option 2 - Manual server installation
+
+In VirtualBox, Create a new virtual machine
+
+    New, give it a name and select Linux - Ubuntu 64 bit
+    I'm giving mine 2GB of memory
+    10GB of disk space should be enough
+    The next few defaults are fine... keep clicking to "Create"
+    Select the machine and click Start
+    Choose the Ubuntu Server 20.04 iso file as installation medium
+    The default options are fine
+    Enter a username, machine name, and password to be able to log in to this machine
+    Install openssh server, but none of the snaps
+
+Set up port forwarding
+
+    Select your machine, the go to Settings -> Network -> Advanced -> Port Forwarding
+    For your host port, add the port you want to type in to get to the machine, and guest port to be what your guest OS sees. We will need to forward port 22 and port 80. I used 24022 to go to port 22, and 24080 to go to port 80
+
+Install and set up mySQL:
+
+    Connect to your server over ssh: ssh jeff@127.0.0.1 -p 24022
+    Ensure your repositories are up-to-date: sudo apt update
+    Install mySQL: sudo apt install mysql-server
+    Optional - secure installation: mysql_secure_installation
+        Disable anonymous users
+        Disallow remote login
+        Remove 'test' database
+    Initial login: sudo mysql -u root
+    Create a database for your project: create database studentDatabase;
+    Create a user account for the database admin: create user jeff@localhost identified by 'mypass';
+    Grant the necessary privileges to this user: grant all privileges on studentDatabase.* to jeff@localhost;
+    Create a www user: create user www@localhost identified by 'mypass';
+    Give your user the privileges they need: grant insert, select, update, delete on studentDatabase.* to www@localhost;
+    A tenet of security is the principle of least privilege. Only give the privileges that are necessary to users. Granting too many privileges here could be the break in your armor that an intruder needs.
+
+    Note that the www user will be only be able to do the CRUD operations. The database admin will only be able to make changes to the web database. Making other changes such as creating additional databases requires the virtual machine's root.
+    You can use your first user to create your database schema:
+    use studentDatabase;
+    create table studentinfo (id integer primary key, first_name text, last_name text);
+    insert into studentinfo values (1000001, "Ned", "Nedson"), (1000002, "Ted", "Tedson");
+    select * from studentinfo;
+
+Install Apache:
+
+    Connect to your server over ssh
+    Update your repositories: sudo apt update
+    Install apache: sudo apt install apache2
+    If you haven't already set up port forwarding for port 80, do so now
+    Test the apache installation by visiting localhost:24080 in your web browser
+    The root of your webserver is now located at /var/www/html/
+    Anything you put in that directory will be accessible
+
+Install Php:
+
+    Connect to your server over ssh
+    Update the repositories: sudo apt update
+    Install php: sudo apt install php libapache2-mod-php php-mysql
+    Create a file in your web root directory called test.php with the following contents: <?php phpinfo(); ?>
+    Verify Php is working correctly: Visit localhost:24080/test.php
+
+Cleaning up
+
+    Remove the index.html and test.php files to prevent a potential attacker from gaining information about your system, like version numbers or specific software types.
+
+Transferring files to/from your server using scp [source] [destination]
+
+    scp -P 24022 jeff@127.0.0.1:myfile.sql c:\users\jeff\Desktop
+    scp -P 24022 myfile.html jeff@127.0.0.1:~
