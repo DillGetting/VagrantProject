@@ -1,0 +1,74 @@
+Extra--Tabletop Exercise
+
+Cybersecurity Tabletop Exercises--Extra Credit
+
+In Cybersecurity, tabletop exercises are simple exercises and scenarios designed to help you think about, and consider actions, under certain scenarios. The goal is to practice how you would respond. The idea being that if something does happen, you will have prepared enough to respond.
+
+ 
+
+These scenarios were selected from: https://cybersecurity.wa.gov/tabletop-exercises
+
+ 
+
+    An employee casually remarks about how generous it is of state officials to provide the handful of USB drives on the conference room table, embossed with the State logo. After making some inquiries you find there is no state program to provide USB drives to employees
+         What do you do?
+    The news is reporting that a major chemical plant, located 2 miles away, has had a significant toxic chemical leak. There is a chemical “cloud” and your office building is in the path of the plume
+         What do you do?
+    A pandemic flu starts. Employees start calling in sick, but it’s not clear if they are ill or afraid to go out in public. Enough people are absent that the organization struggles to maintain the IT infrastructure
+        What do you do?
+    Your agency has received a phone call indicating that you will experience a Telephony Denial of Service (TDoS) attack beginning in two days unless you pay a ransom by 12 p.m. local time
+        What do you do?
+     You receive news that an employee accidentally disclosed sensitive personally identifiable information records. This occurred when they accidentally emailed a document that had not been properly scrubbed to a contractor 
+        What do you do?
+    One of your organization’s internal departments frequently uses outside cloud storage to store large amounts of data, some of which may be considered sensitive. You have recently learned that the cloud storage provider that is being used has been publicly compromised and large amounts of data have been exposed
+        What do you do?
+    Numerous sensitive internal documents are found on the internet. It appears that the multi-function printer/copier is connected to an external facing IP. All documents found on the internet are known to have been printed or copied on this machine
+        What do you do?
+    An employee calls to ask for the password for the Wi-Fi network, indicating they would like to use it on their personal cellphone. You don’t have a Wi-Fi network. A scan of the building indicates there are 4 Wi-Fi networks broadcasting a variety of names that suggest people are using them for work purposes
+        What do you do?
+        
+        
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+$provisionScript = <<-SCRIPT
+sed -i 's#PasswordAuthentication no#PasswordAuthentication yes#g' /etc/ssh/sshd_config
+systemctl restart sshd
+sudo yum install -y httpd
+systemctl start httpd
+sudo yum install -y telnet-server
+systemctl enable telnet.socket
+systemctl start telnet.socket
+sudo yum install -y vsftpd
+systemctl enable vsftpd
+sed -i 's#anonymous_enable=NO#anonymous_enable=YES#g' /etc/vsftpd/vsftpd.conf
+sed -i 's#local_enable=YES#local_enable=NO#g' /etc/vsftpd/vsftpd.conf
+sed -i 's#write_enable=NO#write_enable=YES#g' /etc/vsftpd/vsftpd.conf
+sudo echo anon_upload_enable=YES >> /etc/vsftpd/vsftpd.conf
+sudo echo anon_mkdir_write_enable=YES >> /etc/vsftpd/vsftpd.conf
+sudo echo no_anon_password=YES >> /etc/vsftpd/vsftpd.conf
+sudo echo anon_root=/var/ftp >> /etc/vsftpd/vsftpd.conf
+sudo chown ftp /var/ftp
+sudo chown nobody /var/ftp/pub
+sudo chgrp ftp /var/ftp
+sudo chmod 775 /var/ftp/pub
+systemctl start vsftpd
+sudo adduser -G wheel -d /home/test -s /bin/bash -p $(echo test | openssl passwd -1 -stdin) test
+SCRIPT
+
+Vagrant.configure("2") do |config|
+ config.vbguest.auto_update = false
+
+ config.vm.define "centos" do |centos|
+   centos.vm.box = "centos/7"
+   centos.vm.network "private_network", ip: "192.168.33.10"
+   centos.vm.hostname = "server"
+   centos.vm.provision "shell", inline: $provisionScript
+ end
+
+ config.vm.define "kali" do |kali|
+   kali.vm.box = "kalilinux/rolling"
+   kali.vm.network "private_network", ip: "192.168.33.11"
+   kali.vm.hostname = "kali"
+ end
+end
