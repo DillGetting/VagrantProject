@@ -1,0 +1,45 @@
+This lab is a little different, and a little harder, than previous labs. The Juice Shop is a web application created with many errors in it. It is specifically designed to teach you to recognize problems with Web Application Security. This lab is to demonstrate how a seemingly well-done web site can be a security nightmare.
+
+
+Setup:
+
+    Install git (https://git-scm.com/downloads)
+    Install [Vagrant](https://www.vagrantup.com/downloads.html) and [Virtualbox](https://www.virtualbox.org/wiki/Downloads) if they are not installed.
+        You may need to install vagrant guest additions. Use the following command from the command line: vagrant plugin install vagrant-vbguest.
+    From powershell: Run `git clone https://github.com/bkimminich/juice-shop.git` -- This can take a few minutes
+    From powershell cd into juice shop, then Run `cd vagrant`
+    From powershell Run `vagrant up`--This can take a few minutes.
+    When vagrant is finished: open a browser on your host and Browse to [192.168.33.10:3000](http://192.168.33.10:3000)
+
+You should see a website as below:
+
+
+Once you have connected to the Juice Shop, you need to find some of the vulnerabilities. Please create a lab report and include screenshots for discovering the following vulnerabilities. The screenshots can simply show the successful web pages.
+
+    Find the Score Board
+        There is no link to the score board so you will need to find the url.
+        Hint: Pay close attention to how the URLs are formed for each page.
+        Open your html inspector and look at the javascript code.
+            Hints
+                You are looking for the score board so let that guide your approach
+                You should be able to find the correct page in the javascript
+                create the correct URL to go to the Score Board
+    DOM XSS
+        Hints
+            There is a tutorial from the Score Board that will walk you through this exploit.
+    Bonus Payload
+        Hints
+            There is a tutorial from the Score Board that will walk you through this exploit.
+    Privacy Policy
+        Hints (there is a tutorial to walk you through this)
+    Login Admin
+        Hints (there is a tutorial to walk you through this)
+
+Be sure to run the vagrant destroy command from where you ran vagrant up when you are finished!
+
+
+
+the Vagrantfile
+    following command from the command line: vagrant plugin install vagrant-vbguest.
+
+From powershell: Run `git clone https://github.com/bkimminich/juice-shop.git` -- This can take a few minutes
