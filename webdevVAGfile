@@ -1,0 +1,43 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+$provisionScript = <<-SCRIPT
+sed -i 's#PasswordAuthentication no#PasswordAuthentication yes#g' /etc/ssh/sshd_config
+systemctl restart sshd
+sudo apt-get install -y httpd
+systemctl start httpd
+sudo apt-get install -y telnet-server
+systemctl enable telnet.socket
+systemctl start telnet.socket
+sudo apt-get install -y vsftpd
+systemctl enable vsftpd
+sed -i 's#anonymous_enable=NO#anonymous_enable=YES#g' /etc/vsftpd/vsftpd.conf
+sed -i 's#local_enable=YES#local_enable=NO#g' /etc/vsftpd/vsftpd.conf
+sed -i 's#write_enable=NO#write_enable=YES#g' /etc/vsftpd/vsftpd.conf
+sudo echo anon_upload_enable=YES >> /etc/vsftpd/vsftpd.conf
+sudo echo anon_mkdir_write_enable=YES >> /etc/vsftpd/vsftpd.conf
+sudo echo no_anon_password=YES >> /etc/vsftpd/vsftpd.conf
+sudo echo anon_root=/var/ftp >> /etc/vsftpd/vsftpd.conf
+sudo chown ftp /var/ftp
+sudo chown nobody /var/ftp/pub
+sudo chgrp ftp /var/ftp
+sudo chmod 775 /var/ftp/pub
+systemctl start vsftpd
+sudo adduser -G webdev -d /home/test -s /bin/bash -p $(echo test | openssl passwd -1 -stdin) test
+SCRIPT
+
+Vagrant.configure("2") do |config|
+ config.vbguest.auto_update = false
+
+ config.vm.define "webuntu" do |webuntu|
+   webuntu.vm.box = "ubuntu/trusty64"
+   webuntu.vm.network "private_network", ip: "192.168.33.10"
+   webuntu.vm.hostname = "webdev"
+   webuntu.vm.provision "shell", inline: $provisionScript
+ end
+
+end
