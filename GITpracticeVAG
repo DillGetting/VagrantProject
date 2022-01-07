@@ -1,0 +1,35 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+# could be uses for the final vagfile. 
+$provisionScript = <<-SCRIPT
+sed -i 's#PasswordAuthentication no#PasswordAuthentication yes#g' /etc/ssh/sshd_config
+systemctl restart sshd
+SCRIPT
+
+Vagrant.configure("2") do |config|
+  config.vbguest.auto_update = true
+  config.vm.provision "shell",
+    inline: $provisionScript
+
+  config.vm.define "ubuntu" do |ubuntu|
+    ubuntu.vm.box = "ubuntu/xenial64"
+    ubuntu.vm.network "private_network", ip: "192.168.6.9"
+    ubuntu.vm.hostname = "ubuntu"
+    ubuntu.vm.box_version = "20211001.0.0"
+  end
+
+  config.vm.define "debian" do |debian|
+    debian.vm.box = "debian/jessie64"
+    debian.vm.network "private_network", ip: "192.168.6.10"
+    debian.vm.hostname = "debian"
+    debian.vm.box_version = "8.11.1"
+  end
+
+  config.vm.define "ubuntuserver" do |ubuntuserver|
+    ubuntuserver.vm.box = "ubuntu/trusty64"
+    ubuntuserver.vm.network "private_network", ip: "192.168.6.11"
+    ubuntuserver.vm.hostname = "ubuntuserver"
+    ubuntuserver.vm.box_version = "20190514.0.0"
+  end
+
+end
